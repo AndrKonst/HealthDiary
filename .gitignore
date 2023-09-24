@@ -1,0 +1,13 @@
+# Intellij
+.idea/
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+pgDB/
+
+#Test class
+**/Test.java
