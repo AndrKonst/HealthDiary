@@ -7,6 +7,8 @@
 # Maven
 log/
 target/
+
+#pg server
 pgDB/
 
 #Test class
