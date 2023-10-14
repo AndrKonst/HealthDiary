@@ -1,6 +1,6 @@
 package HealthDiary.DataBase.dao;
 
-import HealthDiary.DataBase.models.User;
+import HealthDiary.DataBase.models.DbUser;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import HealthDiary.DataBase.utils.SessionFactoryUtil;
@@ -34,34 +34,34 @@ public class UserDao implements DML {
 
     @Override
     public void insert(Object obj) {
-        User user = (User) obj;
-        this.session.persist(user);
+        DbUser dbUser = (DbUser) obj;
+        this.session.persist(dbUser);
     }
 
     @Override
     public void update(Object obj) {
         // CHeck existence
-        User user = (User) findById(((User) obj).getId());
+        DbUser dbUser = (DbUser) findById(((DbUser) obj).getId());
 
-        session.merge((User) obj);
+        session.merge((DbUser) obj);
     }
 
     @Override
     public void delete(Object obj) {
         // CHeck existence
-        User user = (User) findById(((User) obj).getId());
+        DbUser dbUser = (DbUser) findById(((DbUser) obj).getId());
 
-        session.remove(user);
+        session.remove(dbUser);
     }
 
     public Object findById(Object id) {
-        String user_id = (String) id;
+        Long user_id = (Long) id;
 
-        User user = this.session.get(User.class, user_id);
-        if (user == null){
+        DbUser dbUser = this.session.get(DbUser.class, user_id);
+        if (dbUser == null){
             throw new NoDataFound("No user with id \"" + id + "\"");
         }
 
-        return user;
+        return dbUser;
     }
 }

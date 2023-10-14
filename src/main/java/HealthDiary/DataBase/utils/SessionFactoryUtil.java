@@ -1,6 +1,6 @@
 package HealthDiary.DataBase.utils;
 
-import HealthDiary.DataBase.models.User;
+import HealthDiary.DataBase.models.DbUser;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -28,7 +28,7 @@ public class SessionFactoryUtil {
                 cfg.setProperty("show_sql", "true");
 
                 //add db objects classes
-                cfg.addAnnotatedClass(User.class);
+                cfg.addAnnotatedClass(DbUser.class);
 
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(cfg.getProperties());
                 sessionFactory = cfg.buildSessionFactory(builder.build());

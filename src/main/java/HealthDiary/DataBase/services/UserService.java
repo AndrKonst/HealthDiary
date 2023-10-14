@@ -1,29 +1,27 @@
 package HealthDiary.DataBase.services;
 
 import HealthDiary.DataBase.dao.*;
-import HealthDiary.DataBase.models.User;
+import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.DataBase.utils.TxFixAction;
-
-import java.util.List;
 
 public class UserService {
 
     private UserDao ud;
 
-    public User findUser(String id){
+    public DbUser findUser(Long id){
         this.ud = new UserDao();
 
         Object usr = ud.findById(id);
         ud.fixTx(TxFixAction.COMMIT);
 
-        return (User) usr;
+        return (DbUser) usr;
     }
 
-    public void insertUser(User user) {
+    public void insertUser(DbUser dbUser) {
         this.ud = new UserDao();
 
         try {
-            ud.insert(user);
+            ud.insert(dbUser);
             ud.fixTx(TxFixAction.COMMIT);
         } catch (Exception e) {
             ud.fixTx(TxFixAction.ROLLBACK);
@@ -32,11 +30,11 @@ public class UserService {
 
     }
 
-    public void deleteUser(User user) {
+    public void deleteUser(DbUser dbUser) {
         this.ud = new UserDao();
 
         try {
-            ud.delete(user);
+            ud.delete(dbUser);
             ud.fixTx(TxFixAction.COMMIT);
         } catch (Exception e){
             ud.fixTx(TxFixAction.ROLLBACK);
@@ -44,11 +42,11 @@ public class UserService {
         }
     }
 
-    public void updateUser(User user) {
+    public void updateUser(DbUser dbUser) {
         this.ud = new UserDao();
 
         try {
-            ud.update(user);
+            ud.update(dbUser);
             ud.fixTx(TxFixAction.COMMIT);
         } catch (Exception e){
             ud.fixTx(TxFixAction.ROLLBACK);

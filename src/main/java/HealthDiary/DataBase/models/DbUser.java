@@ -4,41 +4,41 @@ import jakarta.persistence.*;
 
 @Entity
 @Table (name = "users")
-public class User {
+public class DbUser {
 
     @Id
     @Column(name = "user_id")
-    private String id;
+    private long id;
 
-    @Column(name = "is_oper")
-    private int isOper;
+    @Column(name = "is_admin")
+    private int isAdmin;
 
-    public User(){
+    public DbUser(){
     }
 
-    public User(String id, int isOper) {
+    public DbUser(long id, int isAdmin) {
         this.id = id;
-        this.isOper = isOper;
+        this.isAdmin = isAdmin;
     }
 
     //Getters/Setters
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public int getIsOper() {
-        return isOper;
+    public int getIsAdmin() {
+        return isAdmin;
     }
 
-    public void setIsOper(int isOper) {
-        this.isOper = isOper;
+    public void setIsAdmin(int isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     @Override
     public String toString(){
         String res;
 
-        if(this.isOper == 1){
+        if(this.isAdmin == 1){
             res = "User " +
                   this.id +
                   " (operator)";

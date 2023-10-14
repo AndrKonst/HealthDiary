@@ -7,6 +7,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import HealthDiary.TG.commands.*;
+import HealthDiary.DataBase.services.*;
+import HealthDiary.DataBase.models.DbUser;
+import HealthDiary.exceptions.*;
+
 public class HealthDiaryTGBot extends TelegramLongPollingBot {
 
     private final String BOTNAME;
@@ -36,10 +41,24 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         Long userId = fromUser.getId();
         String userText = null;
 
+        // check user
+        DbUser user;
+        UserService us = new UserService();
+
+        try {
+            user = us.findUser(userId);
+        } catch (NoDataFound e) {
+            user = new DbUser(userId, 0);
+            us.insertUser(user);
+        }
+
         // Getting text
         if (msg.isCommand()) {
-            System.out.println("command: " + msg.getText());
+            String command = msg.getText();
 
+            CommandFactory cf = new CommandFactory(command);
+            Answer answ =  cf.getCommand();
+            sendText(user.getId(), answ.prepareAnswer());
         } else {
             if (msg.hasText()) {
                 userText = msg.getText();
@@ -48,12 +67,12 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
                 System.out.println("Usr "
                         + fromUser.getFirstName()
                         + " (Id "
-                        + userId
+                        + user.getId()
                         + ") wrote: "
                         + userText);
 
                 // echo received text
-                sendText(userId, msg.getText());
+                sendText(user.getId(), msg.getText());
             }
         }
     }
