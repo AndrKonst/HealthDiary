@@ -1,8 +1,9 @@
 package HealthDiary.TG.commands;
 
-import java.util.List;
+import HealthDiary.DataBase.models.DbUser;
 
 public interface Answer {
 
-    String prepareAnswer();
+    void prepareAnswer(DbUser user);
+
 }

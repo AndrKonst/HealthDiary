@@ -3,6 +3,7 @@ package HealthDiary.TG;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -34,53 +35,82 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
         // receive update params
-        Message msg = update.getMessage();
-        User fromUser = msg.getFrom();
-        Long userId = fromUser.getId();
-        String userText = null;
 
-        // check user
-        DbUser user;
-        UserService us = new UserService();
+        if (update.hasMessage()) {
+            Message msg = update.getMessage();
+            User fromUser = msg.getFrom();
+            Long userId = fromUser.getId();
 
-        try {
-            user = us.findUser(userId);
-        } catch (NoDataFound e) {
-            user = new DbUser(userId, 0);
-            us.insertUser(user);
+            // check user
+            DbUser user;
+            UserService us = new UserService();
+
+            try {
+                user = us.findUser(userId);
+            } catch (NoDataFound e) {
+                user = new DbUser(userId, 0);
+                us.insertUser(user);
+            }
+
+            // Getting text
+            if (msg.isCommand()) {
+
+                CommandFactory cf = new CommandFactory(msg.getText());
+                Answer answ = cf.getCommand();
+                answ.prepareAnswer(user);
+
+                TGMessage sendMsg = new TGMessage();
+
+                // Кому отправляем
+                sendMsg.setChatId(user.getId());
+
+                // Текст сообщения
+                if (answ instanceof TextAnsw) {
+                    sendMsg.setMsgText(((TextAnsw) answ).getAnswText());
+                }
+
+                // Клавиатура
+                if (answ instanceof KeyboardAnsw) {
+                    sendMsg.setKeyBoard(((KeyboardAnsw) answ).getKeyboard());
+                }
+
+                sendMsg2Tg(sendMsg.getMsg());
+            } else {
+                if (msg.hasText()) {
+                    String userText = msg.getText();
+
+                    // received text debug
+                    System.out.println("Usr "
+                            + fromUser.getFirstName()
+                            + " (Id "
+                            + user.getId()
+                            + ") wrote: "
+                            + userText);
+
+                    // echo received text
+                    TGMessage sendMsg = new TGMessage();
+
+                    // Кому отправляем
+                    sendMsg.setChatId(user.getId());
+                    // Текст сообщения
+                    sendMsg.setMsgText(msg.getText());
+
+                    sendMsg2Tg(sendMsg.getMsg());
+                }
+            }
         }
 
-        // Getting text
-        if (msg.isCommand()) {
-            String command = msg.getText();
+        // Обработка нажатия на inline кнопку
+        if (update.hasCallbackQuery()) {
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+            String buttonData = callbackQuery.getData();
 
-            CommandFactory cf = new CommandFactory(command);
-            Answer answ =  cf.getCommand();
-            sendText(user.getId(), answ.prepareAnswer());
-        } else {
-            if (msg.hasText()) {
-                userText = msg.getText();
-
-                // received text debug
-                System.out.println("Usr "
-                        + fromUser.getFirstName()
-                        + " (Id "
-                        + user.getId()
-                        + ") wrote: "
-                        + userText);
-
-                // echo received text
-                sendText(user.getId(), msg.getText());
-            }
+            System.out.println(buttonData);
         }
     }
 
-    public void sendText(Long who, String what){
-        SendMessage sm = SendMessage.builder()
-                .chatId(who.toString()) //Who are we sending a message to
-                .text(what).build();    //Message content
+    public void sendMsg2Tg(SendMessage sm){
         try {
             execute(sm);                        //Actually sending the message
         } catch (TelegramApiException e) {

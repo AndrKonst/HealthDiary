@@ -1,10 +1,16 @@
 package HealthDiary.TG.commands;
 
-import java.util.List;
+import HealthDiary.DataBase.models.DbUser;
 
-public class Help implements Answer {
+public class Help implements TextAnsw {
+    private String answText;
     @Override
-    public String prepareAnswer() {
-        return "help message";
+    public void prepareAnswer(DbUser user) {
+        answText = "help message";
+    }
+
+    @Override
+    public String getAnswText() {
+        return answText;
     }
 }
