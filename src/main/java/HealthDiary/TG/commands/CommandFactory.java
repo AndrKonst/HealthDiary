@@ -1,5 +1,7 @@
 package HealthDiary.TG.commands;
 
+import HealthDiary.TG.Answer;
+
 public class CommandFactory {
 
     private String command;

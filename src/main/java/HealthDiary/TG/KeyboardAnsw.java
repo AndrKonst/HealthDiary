@@ -1,6 +1,5 @@
-package HealthDiary.TG.commands;
+package HealthDiary.TG;
 
-import HealthDiary.DataBase.models.DbUser;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 public interface KeyboardAnsw extends TextAnsw {

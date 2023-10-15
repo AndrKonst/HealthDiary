@@ -1,13 +1,19 @@
-package HealthDiary.TG.commands;
+package HealthDiary.TG.Messages;
 
 import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.TG.TextAnsw;
 
-public class Help implements TextAnsw {
+public class Text implements TextAnsw {
+
     private String answText;
+
+
+    public Text(String text){
+        this.answText = text;
+    }
     @Override
     public void prepareAnswer(DbUser user) {
-        answText = "help message";
+
     }
 
     @Override

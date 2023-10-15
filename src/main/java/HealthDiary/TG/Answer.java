@@ -1,4 +1,4 @@
-package HealthDiary.TG.commands;
+package HealthDiary.TG;
 
 import HealthDiary.DataBase.models.DbUser;
 

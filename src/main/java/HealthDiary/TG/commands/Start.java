@@ -1,6 +1,8 @@
 package HealthDiary.TG.commands;
 
 import HealthDiary.DataBase.models.DbUser;
+import HealthDiary.TG.KeyboardAnsw;
+import HealthDiary.TG.buttons.Button;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -28,17 +30,25 @@ public class Start implements KeyboardAnsw {
     }
 
     public InlineKeyboardMarkup setKeyboard(DbUser user) {
-        // Создаем кнопки
-        InlineKeyboardButton button1_1 = new InlineKeyboardButton();
-        button1_1.setText("Нажми меня");
-        button1_1.setCallbackData("button_clicked"); // Данные, которые будут отправлены обратно при нажатии на кнопку
+        // Ряды
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
 
-        // Создаем списки кнопок (ряды) и добавляем в них кнопки
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
+        // Список дневников
+        InlineKeyboardButton button1_1 = new InlineKeyboardButton();
+        button1_1.setText(Button.DIARY_LIST.getText());
+        button1_1.setCallbackData(Button.DIARY_LIST.getCallbackText());
         keyboardButtonsRow1.add(button1_1);
 
+        // Новый дневник
+        if (user.getIsAdmin() == 1){
+            InlineKeyboardButton button1_2 = new InlineKeyboardButton();
+            button1_2.setText(Button.NEW_DIARY.getText());
+            button1_2.setCallbackData(Button.NEW_DIARY.getCallbackText());
+            keyboardButtonsRow1.add(button1_2);
+        }
+
         // Добавляем ряды кнопок в список
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow1);
 
         //Создаем клавиатуру

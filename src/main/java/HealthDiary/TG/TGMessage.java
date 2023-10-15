@@ -7,22 +7,29 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 public class TGMessage {
     private SendMessage msg;
 
-    TGMessage(){
+    public TGMessage(){
         this.msg = new SendMessage();
     }
 
-    void setMsgText(String msgText){
+    public void setMsgText(String msgText){
         // msg text
         this.msg.setText(msgText);
     }
 
-    void setChatId (@NotNull Long chat_id){
+    public void setChatId (@NotNull Long chat_id){
         //Who are we sending a message to
         this.msg.setChatId(chat_id.toString());
     }
 
-    void setKeyBoard(InlineKeyboardMarkup kb){
+    public void setKeyBoard(InlineKeyboardMarkup kb){
         this.msg.setReplyMarkup(kb);
+    }
+
+    public boolean isValid(){
+        if (msg.getChatId().isEmpty() || msg.getText().isEmpty()){
+            return false;
+        }
+        return true;
     }
 
     public SendMessage getMsg() {

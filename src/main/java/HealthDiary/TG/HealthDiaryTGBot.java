@@ -1,5 +1,6 @@
 package HealthDiary.TG;
 
+import HealthDiary.TG.buttons.BtnCallbackFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -12,6 +13,7 @@ import HealthDiary.TG.commands.*;
 import HealthDiary.DataBase.services.*;
 import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.exceptions.*;
+import HealthDiary.TG.Messages.Text;
 
 public class HealthDiaryTGBot extends TelegramLongPollingBot {
 
@@ -36,6 +38,9 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         // receive update params
+        TGMessage sendMsg = new TGMessage();
+        UserService us = new UserService();
+        DbUser user;
 
         if (update.hasMessage()) {
             Message msg = update.getMessage();
@@ -43,9 +48,6 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
             Long userId = fromUser.getId();
 
             // check user
-            DbUser user;
-            UserService us = new UserService();
-
             try {
                 user = us.findUser(userId);
             } catch (NoDataFound e) {
@@ -58,24 +60,8 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
 
                 CommandFactory cf = new CommandFactory(msg.getText());
                 Answer answ = cf.getCommand();
-                answ.prepareAnswer(user);
 
-                TGMessage sendMsg = new TGMessage();
-
-                // Кому отправляем
-                sendMsg.setChatId(user.getId());
-
-                // Текст сообщения
-                if (answ instanceof TextAnsw) {
-                    sendMsg.setMsgText(((TextAnsw) answ).getAnswText());
-                }
-
-                // Клавиатура
-                if (answ instanceof KeyboardAnsw) {
-                    sendMsg.setKeyBoard(((KeyboardAnsw) answ).getKeyboard());
-                }
-
-                sendMsg2Tg(sendMsg.getMsg());
+                sendMsg = initMsg(answ, user, sendMsg);
             } else {
                 if (msg.hasText()) {
                     String userText = msg.getText();
@@ -89,14 +75,7 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
                             + userText);
 
                     // echo received text
-                    TGMessage sendMsg = new TGMessage();
-
-                    // Кому отправляем
-                    sendMsg.setChatId(user.getId());
-                    // Текст сообщения
-                    sendMsg.setMsgText(msg.getText());
-
-                    sendMsg2Tg(sendMsg.getMsg());
+                    sendMsg = initMsg(new Text(msg.getText()), user, sendMsg);
                 }
             }
         }
@@ -106,15 +85,46 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             String buttonData = callbackQuery.getData();
 
-            System.out.println(buttonData);
+            // Так как это колбэк, то пользователь точно есть
+            user = us.findUser(callbackQuery.getFrom().getId());
+
+            // генерим ответ
+            BtnCallbackFactory bcf = new BtnCallbackFactory(buttonData);
+            Answer answ = bcf.getBtnCallback();
+            sendMsg = initMsg(answ, user, sendMsg);
+        }
+
+        if (sendMsg.isValid()){
+            sendMsg2Tg(sendMsg.getMsg());
+        } else {
+            System.out.println("Not valid msg");
         }
     }
 
-    public void sendMsg2Tg(SendMessage sm){
+    private void sendMsg2Tg(SendMessage sm){
         try {
             execute(sm);                        //Actually sending the message
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);      //Any error will be printed here
         }
+    }
+
+    private TGMessage initMsg(Answer answ, DbUser user, TGMessage sendMsg){
+        answ.prepareAnswer(user);
+
+        // Кому отправляем
+        sendMsg.setChatId(user.getId());
+
+        // Текст сообщения
+        if (answ instanceof TextAnsw) {
+            sendMsg.setMsgText(((TextAnsw) answ).getAnswText());
+        }
+
+        // Клавиатура
+        if (answ instanceof KeyboardAnsw) {
+            sendMsg.setKeyBoard(((KeyboardAnsw) answ).getKeyboard());
+        }
+
+        return sendMsg;
     }
 }
