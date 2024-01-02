@@ -16,6 +16,7 @@ commit;
 \i ./tables/diaries.sql
 \i ./tables/questions.sql
 \i ./tables/diary_questions.sql
+\i ./tables/answers.sql
 \i ./tables/question_answers.sql
 
 commit;
