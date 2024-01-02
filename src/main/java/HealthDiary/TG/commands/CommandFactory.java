@@ -1,13 +1,21 @@
 package HealthDiary.TG.commands;
 
 import HealthDiary.TG.Answer;
+import HealthDiary.TG.HealthDiaryTGBot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommandFactory {
 
     private String command;
 
+    private static final Logger logger = LoggerFactory.getLogger(
+            CommandFactory.class);
+
     public CommandFactory(String command){
         this.command = command;
+
+        logger.debug("Get command \"{}\"", command);
     }
 
     public Answer getCommand(){
@@ -16,7 +24,7 @@ public class CommandFactory {
         } else if (command.startsWith("/start")) {
             return new Start();
         } else {
-            System.out.println("command: " + command);
+            logger.warn("Unknown command \"{}\"", command);
             return null;
         }
     }

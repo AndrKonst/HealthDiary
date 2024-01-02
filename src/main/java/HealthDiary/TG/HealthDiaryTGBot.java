@@ -1,5 +1,6 @@
 package HealthDiary.TG;
 
+import HealthDiary.HealthDiaryApp;
 import HealthDiary.TG.buttons.BtnCallbackFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,14 +16,22 @@ import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.exceptions.*;
 import HealthDiary.TG.Messages.Text;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class HealthDiaryTGBot extends TelegramLongPollingBot {
 
     private final String BOTNAME;
     private final String BOTTOKEN;
 
+    private static final Logger logger = LoggerFactory.getLogger(
+            HealthDiaryTGBot.class);
+
     public HealthDiaryTGBot(String name, String token) {
         this.BOTNAME = name;
         this.BOTTOKEN = token;
+
+        logger.debug("Initiated bot {}", name);
     }
 
     @Override
@@ -37,17 +46,22 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
+        logger.debug("Received Update from TG");
+
         // receive update params
         TGMessage sendMsg = new TGMessage();
         UserService us = new UserService();
         DbUser user;
 
+        logger.debug("Processing msg...");
         if (update.hasMessage()) {
             Message msg = update.getMessage();
             User fromUser = msg.getFrom();
             Long userId = fromUser.getId();
 
             // check user
+            logger.debug("Check user {}", userId);
             try {
                 user = us.findUser(userId);
             } catch (NoDataFound e) {
@@ -67,20 +81,17 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
                     String userText = msg.getText();
 
                     // received text debug
-                    System.out.println("Usr "
-                            + fromUser.getFirstName()
-                            + " (Id "
-                            + user.getId()
-                            + ") wrote: "
-                            + userText);
+                    logger.debug("Usr {} (Id {}) wrote: {}", fromUser.getFirstName(), user.getId(), userText);
 
                     // echo received text
                     sendMsg = initMsg(new Text(msg.getText()), user, sendMsg);
                 }
             }
         }
+        logger.debug("Msg processed");
 
         // Обработка нажатия на inline кнопку
+        logger.debug("Processing inline btn pressed");
         if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             String buttonData = callbackQuery.getData();
@@ -97,19 +108,25 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         if (sendMsg.isValid()){
             sendMsg2Tg(sendMsg.getMsg());
         } else {
-            System.out.println("Not valid msg");
+            logger.error("Not valid msg");
         }
     }
 
     private void sendMsg2Tg(SendMessage sm){
+        logger.debug("Sending msg {}", sm.toString());
         try {
             execute(sm);                        //Actually sending the message
         } catch (TelegramApiException e) {
+            logger.error("Not valid msg", e);
             throw new RuntimeException(e);      //Any error will be printed here
         }
+
+        logger.debug("Msg sent");
     }
 
     private TGMessage initMsg(Answer answ, DbUser user, TGMessage sendMsg){
+        logger.debug("Start msg initiation");
+
         answ.prepareAnswer(user);
 
         // Кому отправляем
@@ -124,6 +141,8 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         if (answ instanceof KeyboardAnsw) {
             sendMsg.setKeyBoard(((KeyboardAnsw) answ).getKeyboard());
         }
+
+        logger.debug("Msg initiated");
 
         return sendMsg;
     }
