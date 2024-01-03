@@ -1,8 +1,8 @@
 package HealthDiary.TG;
 
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 public interface KeyboardAnsw extends TextAnsw {
 
-    InlineKeyboardMarkup getKeyboard();
+    ReplyKeyboard getKeyboard();
 }

@@ -63,7 +63,7 @@ public class UserService {
     public void updateUser(DbUser dbUser) {
         this.ud = new UserDao();
 
-        logger.debug("update User {} from database", dbUser.toString());
+        logger.debug("update User {} in database", dbUser.toString());
 
         try {
             ud.update(dbUser);

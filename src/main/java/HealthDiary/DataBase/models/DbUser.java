@@ -13,12 +13,16 @@ public class DbUser {
     @Column(name = "is_admin")
     private int isAdmin;
 
+    @Column(name = "state")
+    private String state;
+
     public DbUser(){
     }
 
-    public DbUser(long id, int isAdmin) {
+    public DbUser(long id, int isAdmin, String state) {
         this.id = id;
         this.isAdmin = isAdmin;
+        this.state = state;
     }
 
     //Getters/Setters
@@ -30,8 +34,16 @@ public class DbUser {
         return isAdmin;
     }
 
+    public String getState() {
+        return state;
+    }
+
     public void setIsAdmin(int isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     @Override
@@ -41,11 +53,15 @@ public class DbUser {
         if(this.isAdmin == 1){
             res = "User " +
                   this.id +
-                  " (operator)";
+                  " (operator)," +
+                  " cur_state = " +
+                  this.state;
         }else{
             res = "User " +
                     this.id +
-                    " (not operator)";
+                    " (not operator)," +
+                    " cur_state = " +
+                    this.state;
         }
 
         return res;

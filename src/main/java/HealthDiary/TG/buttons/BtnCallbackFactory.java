@@ -2,6 +2,7 @@ package HealthDiary.TG.buttons;
 
 import HealthDiary.TG.Answer;
 import HealthDiary.TG.commands.CommandFactory;
+import HealthDiary.TG.Messages.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +16,8 @@ public class BtnCallbackFactory {
     public BtnCallbackFactory(String callbackData){
         logger.debug("Call BtnCallbackFactory");
 
+        logger.debug("callbackData: " + callbackData.toString());
+
         if (callbackData.equals(Button.NEW_DIARY.getCallbackText())) {
             this.btn = Button.NEW_DIARY;
             } else if (callbackData.equals(Button.DIARY_LIST.getCallbackText())) {
@@ -24,13 +27,13 @@ public class BtnCallbackFactory {
 
     public Answer getBtnCallback(){
 
-        logger.debug("Getting callback for button \"{}\"", btn.getText());
+        logger.debug("Getting callback for button \"{}\" ({})", btn.getText(), btn.getCallbackText());
 
         switch (btn) {
             case DIARY_LIST:
                 return null;
             case NEW_DIARY:
-                return null;
+                return new Text("Создание нового дневника");
         }
         return null;
     }

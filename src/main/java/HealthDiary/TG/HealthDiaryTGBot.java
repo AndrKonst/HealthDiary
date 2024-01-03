@@ -1,6 +1,5 @@
 package HealthDiary.TG;
 
-import HealthDiary.HealthDiaryApp;
 import HealthDiary.TG.buttons.BtnCallbackFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -8,16 +7,19 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import HealthDiary.TG.commands.*;
 import HealthDiary.DataBase.services.*;
 import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.exceptions.*;
-import HealthDiary.TG.Messages.Text;
+import HealthDiary.TG.Messages.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 public class HealthDiaryTGBot extends TelegramLongPollingBot {
 
@@ -47,15 +49,17 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        logger.debug("Received Update from TG");
+        logger.debug("Received Update: {}", update.toString());
 
         // receive update params
         TGMessage sendMsg = new TGMessage();
         UserService us = new UserService();
-        DbUser user;
+        DbUser user = null;
+        String user_state = null;
 
-        logger.debug("Processing msg...");
         if (update.hasMessage()) {
+            logger.debug("Processing msg...");
+
             Message msg = update.getMessage();
             User fromUser = msg.getFrom();
             Long userId = fromUser.getId();
@@ -65,9 +69,10 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
             try {
                 user = us.findUser(userId);
             } catch (NoDataFound e) {
-                user = new DbUser(userId, 0);
+                user = new DbUser(userId, 0, null);
                 us.insertUser(user);
             }
+            user_state = user.getState();
 
             // Getting text
             if (msg.isCommand()) {
@@ -78,32 +83,46 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
                 sendMsg = initMsg(answ, user, sendMsg);
             } else {
                 if (msg.hasText()) {
-                    String userText = msg.getText();
 
-                    // received text debug
-                    logger.debug("Usr {} (Id {}) wrote: {}", fromUser.getFirstName(), user.getId(), userText);
+                    DialogFactory df = new DialogFactory(user, msg.getText());
+                    Answer answ = df.getAnswer();
 
-                    // echo received text
-                    sendMsg = initMsg(new Text(msg.getText()), user, sendMsg);
+                    sendMsg = initMsg(answ, user, sendMsg);
                 }
             }
+            logger.debug("Msg processed");
         }
-        logger.debug("Msg processed");
 
         // Обработка нажатия на inline кнопку
-        logger.debug("Processing inline btn pressed");
         if (update.hasCallbackQuery()) {
+            logger.debug("Processing inline btn pressed");
+
             CallbackQuery callbackQuery = update.getCallbackQuery();
             String buttonData = callbackQuery.getData();
 
             // Так как это колбэк, то пользователь точно есть
             user = us.findUser(callbackQuery.getFrom().getId());
+            user_state = user.getState();
 
             // генерим ответ
             BtnCallbackFactory bcf = new BtnCallbackFactory(buttonData);
             Answer answ = bcf.getBtnCallback();
             sendMsg = initMsg(answ, user, sendMsg);
+
+            logger.debug("Inline btn processed");
         }
+
+        // Действия связанные с состоянием пользователя
+        if (user_state != null){
+            if ((user_state.equals(UserState.KEYBOARD.getStateID())) & (user.getState() == null)){
+                logger.debug("Remove keyboard");
+                sendMsg.remove_keyboard();
+            }
+        }
+
+        // Сохраним пользователя, так как могли поменять его состояние
+        logger.debug("before update state");
+        us.updateUser(user);
 
         if (sendMsg.isValid()){
             sendMsg2Tg(sendMsg.getMsg());
@@ -140,6 +159,19 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         // Клавиатура
         if (answ instanceof KeyboardAnsw) {
             sendMsg.setKeyBoard(((KeyboardAnsw) answ).getKeyboard());
+        }
+
+        // Состояние
+        if (answ instanceof KeyboardAnsw){
+            logger.debug("Change user state to \"keyboard\"");
+            user.setState(UserState.KEYBOARD.getStateID());
+        } else if (answ instanceof DiaryCreation) {
+            logger.debug("Change user state to Diari");
+            user.setState(UserState.DIARY_CREATION.getStateID());
+        } else {
+            // Выставляем в статус пользователя, чтобы потом убрать клавиатуру
+            logger.debug("Change user state to null");
+            user.setState(UserState.EMPTY_STATE.getStateID());
         }
 
         logger.debug("Msg initiated");

@@ -1,31 +1,27 @@
-package HealthDiary.TG.commands;
+package HealthDiary.TG.Messages;
 
 import HealthDiary.DataBase.models.DbUser;
-import HealthDiary.TG.HealthDiaryTGBot;
-import HealthDiary.TG.Messages.UserState;
 import HealthDiary.TG.TextAnsw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Help implements TextAnsw {
+public class DiaryCreation implements TextAnsw {
     private String answText;
-
-    public final UserState state = UserState.EMPTY_STATE;
+    public final UserState state = UserState.DIARY_CREATION;
 
     private static final Logger logger = LoggerFactory.getLogger(
-            Help.class);
+            DiaryCreation.class);
 
+    public DiaryCreation(String text){
+        this.answText = text;
+        logger.debug("init DiaryCreation \"{}\"", text);
+    }
     @Override
     public void prepareAnswer(DbUser user) {
-        logger.debug("Prepare Help answer");
-
-        answText = "help message";
     }
 
     @Override
     public String getAnswText() {
-        logger.debug("return Help text");
-
         return answText;
     }
 

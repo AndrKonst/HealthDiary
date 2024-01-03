@@ -1,7 +1,6 @@
 package HealthDiary.TG.commands;
 
 import HealthDiary.TG.Answer;
-import HealthDiary.TG.HealthDiaryTGBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,7 @@ public class CommandFactory {
         if (command.startsWith("/help")) {
             return new Help();
         } else if (command.startsWith("/start")) {
-            return new Start();
+            return new Start_kb();
         } else {
             logger.warn("Unknown command \"{}\"", command);
             return null;
