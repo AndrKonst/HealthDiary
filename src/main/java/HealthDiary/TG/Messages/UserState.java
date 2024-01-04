@@ -1,18 +1,17 @@
 package HealthDiary.TG.Messages;
 
 public enum UserState {
-    KEYBOARD("keyboard"),
-    DIARY_CREATION("diary_creation"),
+    START_MENU(-2),
+    DIARY_CREATION(-1),
+    EMPTY_STATE(0);
 
-    EMPTY_STATE(null);
+    private final int stateID;
 
-    private final String stateID;
-
-    UserState(String stateID){
+    UserState(int stateID){
         this.stateID = stateID;
     }
 
-    public String getStateID() {
+    public int getStateID() {
         return stateID;
     }
 }

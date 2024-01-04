@@ -2,12 +2,18 @@
 \c healthdiary healthdiary;
 
 -- tables
+drop table healthdiary.diary_result;
+
+drop table healthdiary.diary_filling;
+drop sequence healthdiary.diary_filling_seq;
+
 drop table healthdiary.question_answers;
 
 drop table healthdiary.answers;
 drop sequence healthdiary.answers_seq;
 
 drop table healthdiary.diary_question;
+drop sequence healthdiary.diary_question_seq;
 
 drop table healthdiary.questions;
 drop sequence healthdiary.questions_seq;

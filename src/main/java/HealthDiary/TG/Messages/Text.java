@@ -2,7 +2,6 @@ package HealthDiary.TG.Messages;
 
 import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.TG.TextAnsw;
-import HealthDiary.TG.commands.Help;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +27,7 @@ public class Text implements TextAnsw {
     }
 
     @Override
-    public String getRequiredUserState(){
+    public int getRequiredUserState(){
         return state.getStateID();
     };
 }

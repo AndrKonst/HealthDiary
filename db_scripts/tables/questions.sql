@@ -5,5 +5,6 @@ CREATE SEQUENCE healthdiary.questions_seq
 
 create table healthdiary.questions(
   question_id integer primary key default nextval('healthdiary.questions_seq'),
-  text text not null
+  text text not null,
+  repeatable bool not null default false
 )

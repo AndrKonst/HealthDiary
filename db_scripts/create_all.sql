@@ -15,8 +15,10 @@ commit;
 \i ./tables/users.sql
 \i ./tables/diaries.sql
 \i ./tables/questions.sql
-\i ./tables/diary_questions.sql
+\i ./tables/diary_question.sql
 \i ./tables/answers.sql
 \i ./tables/question_answers.sql
+\i ./tables/diary_filling.sql
+\i ./tables/diary_result.sql
 
 commit;

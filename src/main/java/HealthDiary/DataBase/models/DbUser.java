@@ -14,12 +14,12 @@ public class DbUser {
     private int isAdmin;
 
     @Column(name = "state")
-    private String state;
+    private int state;
 
     public DbUser(){
     }
 
-    public DbUser(long id, int isAdmin, String state) {
+    public DbUser(long id, int isAdmin, int state) {
         this.id = id;
         this.isAdmin = isAdmin;
         this.state = state;
@@ -34,7 +34,7 @@ public class DbUser {
         return isAdmin;
     }
 
-    public String getState() {
+    public int getState() {
         return state;
     }
 
@@ -42,7 +42,7 @@ public class DbUser {
         this.isAdmin = isAdmin;
     }
 
-    public void setState(String state) {
+    public void setState(int state) {
         this.state = state;
     }
 

@@ -6,10 +6,8 @@ import HealthDiary.TG.Messages.UserState;
 import HealthDiary.TG.buttons.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
@@ -21,7 +19,7 @@ public class Start_kb implements KeyboardAnsw {
     private String answText;
     private ReplyKeyboard kb;
 
-    public final UserState state = UserState.KEYBOARD;
+    public final UserState state = UserState.START_MENU;
 
     private static final Logger logger = LoggerFactory.getLogger(
             Start_kb.class);
@@ -80,7 +78,7 @@ public class Start_kb implements KeyboardAnsw {
     }
 
     @Override
-    public String getRequiredUserState(){
+    public int getRequiredUserState(){
         return state.getStateID();
     };
 

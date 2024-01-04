@@ -30,7 +30,7 @@ public class Help implements TextAnsw {
     }
 
     @Override
-    public String getRequiredUserState(){
+    public int getRequiredUserState(){
         return state.getStateID();
     };
 }

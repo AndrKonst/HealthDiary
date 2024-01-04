@@ -7,7 +7,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import HealthDiary.TG.commands.*;
@@ -18,8 +17,6 @@ import HealthDiary.TG.Messages.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Objects;
 
 public class HealthDiaryTGBot extends TelegramLongPollingBot {
 
@@ -55,7 +52,7 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         TGMessage sendMsg = new TGMessage();
         UserService us = new UserService();
         DbUser user = null;
-        String user_state = null;
+        int user_state = 0;
 
         if (update.hasMessage()) {
             logger.debug("Processing msg...");
@@ -69,7 +66,7 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
             try {
                 user = us.findUser(userId);
             } catch (NoDataFound e) {
-                user = new DbUser(userId, 0, null);
+                user = new DbUser(userId, 0, 0);
                 us.insertUser(user);
             }
             user_state = user.getState();
@@ -113,11 +110,9 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         }
 
         // Действия связанные с состоянием пользователя
-        if (user_state != null){
-            if ((user_state.equals(UserState.KEYBOARD.getStateID())) & (user.getState() == null)){
-                logger.debug("Remove keyboard");
-                sendMsg.remove_keyboard();
-            }
+        if ((user_state == UserState.START_MENU.getStateID()) & (user.getState() == 0)){
+            logger.debug("Remove keyboard");
+            sendMsg.remove_keyboard();
         }
 
         // Сохраним пользователя, так как могли поменять его состояние
@@ -162,17 +157,8 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         }
 
         // Состояние
-        if (answ instanceof KeyboardAnsw){
-            logger.debug("Change user state to \"keyboard\"");
-            user.setState(UserState.KEYBOARD.getStateID());
-        } else if (answ instanceof DiaryCreation) {
-            logger.debug("Change user state to Diari");
-            user.setState(UserState.DIARY_CREATION.getStateID());
-        } else {
-            // Выставляем в статус пользователя, чтобы потом убрать клавиатуру
-            logger.debug("Change user state to null");
-            user.setState(UserState.EMPTY_STATE.getStateID());
-        }
+        logger.debug("Change user state");
+        user.setState(answ.getRequiredUserState());
 
         logger.debug("Msg initiated");
 
