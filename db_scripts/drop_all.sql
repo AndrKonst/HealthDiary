@@ -1,11 +1,17 @@
 -- connect to db
 \c healthdiary healthdiary;
 
--- tables
-drop table healthdiary.diary_result;
+-- functions
+drop function if exists create_diary;
 
-drop table healthdiary.diary_filling;
-drop sequence healthdiary.diary_filling_seq;
+-- procedures
+drop procedure if exists close_diary;
+
+-- tables
+drop table if exists healthdiary.diary_result;
+
+drop table if exists healthdiary.diary_filling;
+drop sequence if exists healthdiary.diary_filling_seq;
 
 drop table healthdiary.question_answers;
 

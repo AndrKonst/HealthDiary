@@ -8,7 +8,8 @@ import org.slf4j.LoggerFactory;
 public class Text implements TextAnsw {
 
     private String answText;
-    public final UserState state = UserState.EMPTY_STATE;
+    private UserState state = UserState.EMPTY_STATE;
+    private Integer step = null;
 
     private static final Logger logger = LoggerFactory.getLogger(
             Text.class);
@@ -17,6 +18,19 @@ public class Text implements TextAnsw {
         this.answText = text;
         logger.debug("init Text \"{}\"", text);
     }
+
+    public void setAnswText(String answText) {
+        this.answText = answText;
+    }
+
+    public void setState(UserState state) {
+        this.state = state;
+    }
+
+    public void setStep(Integer step) {
+        this.step = step;
+    }
+
     @Override
     public void prepareAnswer(DbUser user) {
     }
@@ -27,7 +41,12 @@ public class Text implements TextAnsw {
     }
 
     @Override
-    public int getRequiredUserState(){
+    public Integer getRequiredUserState(){
         return state.getStateID();
+    };
+
+    @Override
+    public Integer getRequiredUserStep(){
+        return step;
     };
 }

@@ -21,4 +21,10 @@ commit;
 \i ./tables/diary_filling.sql
 \i ./tables/diary_result.sql
 
+-- functions
+\i ./functions/create_diary.sql
+
+-- procedures
+\i ./procedures/close_diary.sql
+
 commit;

@@ -5,5 +5,7 @@ CREATE SEQUENCE healthdiary.diary_filling_seq
 
 create table healthdiary.diary_filling (
   id integer primary key default nextval('healthdiary.diary_filling_seq'),
-  dt date not null default now()
+  user_id integer not null,
+  dt date not null default now(),
+  constraint fk1_diary_filling foreign key (user_id) references healthdiary.users(user_id)
 );

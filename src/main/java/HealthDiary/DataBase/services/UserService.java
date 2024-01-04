@@ -19,21 +19,21 @@ public class UserService {
 
         logger.debug("try find User {} in database", id);
 
-        Object usr = ud.findById(id);
+        DbUser usr = ud.findById(id);
         ud.fixTx(TxFixAction.COMMIT);
 
         logger.debug("Found {}", usr.toString());
 
-        return (DbUser) usr;
+        return usr;
     }
 
     public void insertUser(DbUser dbUser) {
-        this.ud = new UserDao();
+        this.ud = new UserDao(dbUser);
 
         logger.debug("insert User {} in database", dbUser.toString());
 
         try {
-            ud.insert(dbUser);
+            ud.insert();
             ud.fixTx(TxFixAction.COMMIT);
         } catch (Exception e) {
             ud.fixTx(TxFixAction.ROLLBACK);
@@ -45,12 +45,12 @@ public class UserService {
     }
 
     public void deleteUser(DbUser dbUser) {
-        this.ud = new UserDao();
+        this.ud = new UserDao(dbUser);
 
         logger.debug("delete User {} from database", dbUser.toString());
 
         try {
-            ud.delete(dbUser);
+            ud.delete();
             ud.fixTx(TxFixAction.COMMIT);
         } catch (Exception e){
             ud.fixTx(TxFixAction.ROLLBACK);
@@ -61,12 +61,12 @@ public class UserService {
     }
 
     public void updateUser(DbUser dbUser) {
-        this.ud = new UserDao();
+        this.ud = new UserDao(dbUser);
 
         logger.debug("update User {} in database", dbUser.toString());
 
         try {
-            ud.update(dbUser);
+            ud.update();
             ud.fixTx(TxFixAction.COMMIT);
         } catch (Exception e){
             ud.fixTx(TxFixAction.ROLLBACK);

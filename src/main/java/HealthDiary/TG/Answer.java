@@ -6,6 +6,7 @@ public interface Answer {
 
     void prepareAnswer(DbUser user);
 
-    int getRequiredUserState();
+    Integer getRequiredUserState();
+    Integer getRequiredUserStep();
 
 }

@@ -1,65 +1,47 @@
 package HealthDiary.DataBase.dao;
 
 import HealthDiary.DataBase.models.DbUser;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import HealthDiary.DataBase.utils.SessionFactoryUtil;
-import HealthDiary.DataBase.utils.TxFixAction;
 import HealthDiary.exceptions.NoDataFound;
 
-public class UserDao implements DML {
+public class UserDao extends BaseDao implements DML {
 
-    private Session session;
-    private Transaction tx;
+    private DbUser user;
 
     public UserDao(){
-        openTx();
+        super();
     }
+
+    public UserDao(DbUser user){
+        super();
+        this.user = user;
+    }
+
 
     @Override
-    public void openTx() {
-        this.session = SessionFactoryUtil.getSessionFactory().openSession();
-        this.tx = session.beginTransaction();
-    }
-
-    public void fixTx(TxFixAction act) {
-        if (act == TxFixAction.COMMIT) {
-            this.tx.commit();
-            this.session.close();
-        } else if (act == TxFixAction.ROLLBACK) {
-            this.tx.rollback();
-            this.session.close();
+    public void insert() {
+        if(user != null){
+            this.getSession().persist(user);
         }
     }
 
     @Override
-    public void insert(Object obj) {
-        DbUser dbUser = (DbUser) obj;
-        this.session.persist(dbUser);
+    public void update() {
+        // CHeck existence
+        DbUser dbUser = findById(user.getId());
+
+        this.getSession().merge(user);
     }
 
     @Override
-    public void update(Object obj) {
-        // CHeck existence
-        DbUser dbUser = (DbUser) findById(((DbUser) obj).getId());
-
-        session.merge((DbUser) obj);
+    public void delete() {
+        this.getSession().remove(user);
     }
 
-    @Override
-    public void delete(Object obj) {
-        // CHeck existence
-        DbUser dbUser = (DbUser) findById(((DbUser) obj).getId());
+    public DbUser findById(Long user_id) {
 
-        session.remove(dbUser);
-    }
-
-    public Object findById(Object id) {
-        Long user_id = (Long) id;
-
-        DbUser dbUser = this.session.get(DbUser.class, user_id);
+        DbUser dbUser = this.getSession().get(DbUser.class, user_id);
         if (dbUser == null){
-            throw new NoDataFound("No user with id \"" + id + "\"");
+            throw new NoDataFound("No user with id \"" + user_id + "\"");
         }
 
         return dbUser;

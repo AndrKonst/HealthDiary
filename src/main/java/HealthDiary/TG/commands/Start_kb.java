@@ -2,6 +2,7 @@ package HealthDiary.TG.commands;
 
 import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.TG.KeyboardAnsw;
+import HealthDiary.TG.Messages.Text;
 import HealthDiary.TG.Messages.UserState;
 import HealthDiary.TG.buttons.Button;
 import org.slf4j.Logger;
@@ -14,31 +15,28 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.ArrayList;
 import java.util.List;
 
-public class Start_kb implements KeyboardAnsw {
-
-    private String answText;
+public class Start_kb extends Text implements KeyboardAnsw {
     private ReplyKeyboard kb;
-
-    public final UserState state = UserState.START_MENU;
 
     private static final Logger logger = LoggerFactory.getLogger(
             Start_kb.class);
+
+    public Start_kb(DbUser user) {
+        super(null);
+        if (user.getIsAdmin() == 1){
+            setAnswText("Посмотри список твоих дневников или создай новый");
+        } else {
+            setAnswText("Посмотри список твоих дневников");
+        }
+
+        setState(UserState.START_MENU);
+    }
 
     @Override
     public void prepareAnswer(DbUser user) {
         logger.debug("Prepare Start answer");
 
-        if (user.getIsAdmin() == 1){
-            this.answText = "Посмотри список твоих дневников или создай новый";
-        } else {
-            this.answText = "Посмотри список твоих дневников";
-        }
         this.kb = setKeyboard(user);
-    }
-
-    @Override
-    public String getAnswText() {
-        return answText;
     }
 
     public ReplyKeyboard getKeyboard(){
@@ -76,10 +74,4 @@ public class Start_kb implements KeyboardAnsw {
 
         return replyKeyboardMarkup;
     }
-
-    @Override
-    public int getRequiredUserState(){
-        return state.getStateID();
-    };
-
 }

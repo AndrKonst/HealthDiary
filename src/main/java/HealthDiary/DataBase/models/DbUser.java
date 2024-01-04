@@ -14,12 +14,15 @@ public class DbUser {
     private int isAdmin;
 
     @Column(name = "state")
-    private int state;
+    private Integer state;
+
+    @Column(name = "step")
+    private Integer step;
 
     public DbUser(){
     }
 
-    public DbUser(long id, int isAdmin, int state) {
+    public DbUser(long id, int isAdmin, Integer state) {
         this.id = id;
         this.isAdmin = isAdmin;
         this.state = state;
@@ -34,16 +37,23 @@ public class DbUser {
         return isAdmin;
     }
 
-    public int getState() {
+    public Integer getState() {
         return state;
+    }
+
+    public Integer getStep() {
+        return step;
     }
 
     public void setIsAdmin(int isAdmin) {
         this.isAdmin = isAdmin;
     }
 
-    public void setState(int state) {
+    public void setState(Integer state) {
         this.state = state;
+    }
+    public void setStep(Integer step) {
+        this.step = step;
     }
 
     @Override
@@ -55,13 +65,17 @@ public class DbUser {
                   this.id +
                   " (operator)," +
                   " cur_state = " +
-                  this.state;
+                  this.state +
+                  ", cur_step = " +
+                  this.step;
         }else{
             res = "User " +
                     this.id +
                     " (not operator)," +
                     " cur_state = " +
-                    this.state;
+                    this.state +
+                    ", cur_step = " +
+                    this.step;
         }
 
         return res;

@@ -4,9 +4,10 @@ CREATE SEQUENCE healthdiary.diaries_seq
     START WITH 1;
 
 create table diaries (
-    id integer default nextval('healthdiary.diaries_seq'),
-    name text not null,
-    start_dt date default now(),
-    end_dt date,
-    constraint diaries_pk primary key (id)
+  id integer default nextval('healthdiary.diaries_seq'),
+  name text not null,
+  start_dt date default now(),
+  end_dt date,
+  constraint pk_diaries primary key (id),
+  constraint uk_diaries unique (name)
 );

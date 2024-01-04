@@ -52,7 +52,7 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         TGMessage sendMsg = new TGMessage();
         UserService us = new UserService();
         DbUser user = null;
-        int user_state = 0;
+        Integer user_state = 0;
 
         if (update.hasMessage()) {
             logger.debug("Processing msg...");
@@ -74,7 +74,7 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
             // Getting text
             if (msg.isCommand()) {
 
-                CommandFactory cf = new CommandFactory(msg.getText());
+                CommandFactory cf = new CommandFactory(msg.getText(), user);
                 Answer answ = cf.getCommand();
 
                 sendMsg = initMsg(answ, user, sendMsg);
@@ -110,9 +110,11 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         }
 
         // Действия связанные с состоянием пользователя
-        if ((user_state == UserState.START_MENU.getStateID()) & (user.getState() == 0)){
-            logger.debug("Remove keyboard");
-            sendMsg.remove_keyboard();
+        if (user_state != null){
+            if ((user_state == UserState.START_MENU.getStateID()) & (user.getState() == 0)){
+                logger.debug("Remove keyboard");
+                sendMsg.remove_keyboard();
+            }
         }
 
         // Сохраним пользователя, так как могли поменять его состояние
@@ -159,6 +161,9 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         // Состояние
         logger.debug("Change user state");
         user.setState(answ.getRequiredUserState());
+        // Шаг
+        logger.debug("Change user step");
+        user.setStep(answ.getRequiredUserStep());
 
         logger.debug("Msg initiated");
 
