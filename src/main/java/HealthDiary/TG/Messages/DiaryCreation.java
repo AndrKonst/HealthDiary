@@ -35,8 +35,8 @@ public class DiaryCreation extends Text {
         if (this.getCurStep() == 1){ // Ввели название дневника, создаем его
             try {
                 // Создаем Дневник
-                DiaryService ds = new DiaryService();
-                ds.createDiary(this.userAnswText, user);
+                DiaryService ds = new DiaryService(user);
+                ds.createDiary(this.userAnswText);
             } catch (Exception e) {
                 // Дневник не получилось создать
                 this.setAnswText("Не получилось создать дневник с таким именем :(\nКакое новое имя?");

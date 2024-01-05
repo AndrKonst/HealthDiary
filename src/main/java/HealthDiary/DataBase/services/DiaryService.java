@@ -14,6 +14,11 @@ public class DiaryService {
             DiaryService.class);
 
     private DiaryDao dd;
+    private DbUser user;
+
+    public DiaryService(DbUser user){
+        this.user = user;
+    }
 
     public DbDiary findDiary(Long id){
         this.dd = new DiaryDao();
@@ -41,10 +46,10 @@ public class DiaryService {
         return diary;
     }
 
-    public void createDiary(String diary_name, DbUser user) {
+    public void createDiary(String diary_name) {
         DbDiary diary = new DbDiary(diary_name);
 
-        logger.debug("Create diary \"{}\" in database", diary.getName());
+        logger.debug("Create diary \"{}\" by user {} in database", diary.getName(), this.user);
 
         this.dd = new DiaryDao(diary);
 
