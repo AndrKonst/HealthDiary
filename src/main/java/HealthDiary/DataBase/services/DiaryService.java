@@ -41,7 +41,7 @@ public class DiaryService {
         return diary;
     }
 
-    public void createDiary(String diary_name) {
+    public void createDiary(String diary_name, DbUser user) {
         DbDiary diary = new DbDiary(diary_name);
 
         logger.debug("Create diary \"{}\" in database", diary.getName());
@@ -49,7 +49,7 @@ public class DiaryService {
         this.dd = new DiaryDao(diary);
 
         try {
-            dd.createDiary();
+            dd.createDiary(user);
             dd.fixTx(TxFixAction.COMMIT);
         } catch (Exception e) {
             dd.fixTx(TxFixAction.ROLLBACK);

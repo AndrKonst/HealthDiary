@@ -1,6 +1,7 @@
 package HealthDiary.DataBase.dao;
 
 import HealthDiary.DataBase.models.DbDiary;
+import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.exceptions.NoDataFound;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
@@ -43,10 +44,11 @@ public class DiaryDao extends BaseDao{
         return diary;
     }
 
-    public void createDiary() {
+    public void createDiary(DbUser user) {
 
         NativeQuery query = this.getSession().getNamedNativeQuery("create_diary");
         query.setParameter("diary_name", this.diary.getName());
+        query.setParameter("user_id", user.getId());
 
         this.diary.setId((Long) query.getSingleResult());
     }

@@ -1,6 +1,7 @@
 package HealthDiary.TG.Messages;
 
 import HealthDiary.DataBase.models.DbUser;
+import HealthDiary.DataBase.services.DiaryFillingService;
 import HealthDiary.DataBase.services.DiaryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +34,9 @@ public class DiaryCreation extends Text {
 
         if (this.getCurStep() == 1){ // Ввели название дневника, создаем его
             try {
+                // Создаем Дневник
                 DiaryService ds = new DiaryService();
-                ds.createDiary(this.userAnswText);
+                ds.createDiary(this.userAnswText, user);
             } catch (Exception e) {
                 // Дневник не получилось создать
                 this.setAnswText("Не получилось создать дневник с таким именем :(\nКакое новое имя?");

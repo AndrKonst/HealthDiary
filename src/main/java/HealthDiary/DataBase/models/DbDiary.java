@@ -19,7 +19,7 @@ import static jakarta.persistence.ParameterMode.IN;
                 resultClass = DbDiary.class),
         @NamedNativeQuery(
             name="create_diary",
-            query="SELECT healthdiary.create_diary(:diary_name)",
+            query="SELECT healthdiary.create_diary(:diary_name, :user_id)",
             resultClass= Long.class)}
 )
 public class DbDiary {
