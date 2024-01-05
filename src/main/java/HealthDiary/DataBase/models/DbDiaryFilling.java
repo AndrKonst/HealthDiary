@@ -30,12 +30,12 @@ public class DbDiaryFilling {
     @Column(name = "dt")
     private Date dt;
     @Column(name = "creation_fl")
-    private Boolean creationFl;
+    private Integer creationFl;
 
     public DbDiaryFilling(){
     }
 
-    public DbDiaryFilling(DbUser user, Boolean creationFl) {
+    public DbDiaryFilling(DbUser user, Integer creationFl) {
         this.user = user;
         this.creationFl = creationFl;
     }
@@ -64,11 +64,11 @@ public class DbDiaryFilling {
         this.dt = dt;
     }
 
-    public Boolean getCreationFl() {
+    public Integer getCreationFl() {
         return creationFl;
     }
 
-    public void setCreationFl(Boolean creationFl) {
+    public void setCreationFl(Integer creationFl) {
         this.creationFl = creationFl;
     }
 

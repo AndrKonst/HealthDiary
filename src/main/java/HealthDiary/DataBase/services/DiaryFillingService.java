@@ -26,7 +26,7 @@ public class DiaryFillingService {
         return dfd.getDf();
     }
 
-    public DbDiaryFilling findDiaryFilling(DbUser user, Boolean diaryCreationFl){
+    public DbDiaryFilling findDiaryFilling(DbUser user, Integer diaryCreationFl){
         this.dfd = new DiaryFillingDao(user, diaryCreationFl);
 
         logger.debug("try find diary_filling for user {} in database", user);
@@ -39,7 +39,7 @@ public class DiaryFillingService {
         return dfd.getDf();
     }
 
-    public void setFilling(DbUser user, Boolean diaryCreationFl) {
+    public void setFilling(DbUser user, Integer diaryCreationFl) {
         DiaryFillingDao dfd = new DiaryFillingDao(user, diaryCreationFl);
 
         logger.debug("Set diary_filling for user \"{}\" in database", user);

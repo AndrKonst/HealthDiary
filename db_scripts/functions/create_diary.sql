@@ -6,7 +6,7 @@ declare
 begin
   insert into healthdiary.diaries(name) values (p_name) returning id into l_diary_id;
 
-  l_df_id := healthdiary.create_filling(p_user_id, true);
+  l_df_id := healthdiary.create_filling(p_user_id, l_diary_id);
 
   return l_diary_id;
 end;

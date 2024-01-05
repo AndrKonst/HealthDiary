@@ -1,4 +1,4 @@
-create or replace function create_filling( p_user_id bigint, p_diary_creation_fl bool default false) returns integer
+create or replace function create_filling( p_user_id in bigint, p_diary_creation_fl in integer) returns integer
 as $$
 declare
   l_filling_id integer;

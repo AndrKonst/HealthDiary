@@ -12,7 +12,7 @@ public class DiaryFillingDao extends BaseDao {
     public DiaryFillingDao() {
         super();
     }
-    public DiaryFillingDao(DbUser user, Boolean diaryCreationFl) {
+    public DiaryFillingDao(DbUser user, Integer diaryCreationFl) {
         super();
         this.df = new DbDiaryFilling(user, diaryCreationFl);
     }
