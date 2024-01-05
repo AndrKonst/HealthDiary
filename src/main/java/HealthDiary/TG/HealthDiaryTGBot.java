@@ -52,7 +52,6 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         TGMessage sendMsg = new TGMessage();
         UserService us = new UserService();
         DbUser user = null;
-        Integer user_state = 0;
 
         if (update.hasMessage()) {
             logger.debug("Processing msg...");
@@ -69,7 +68,6 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
                 user = new DbUser(userId, 0, 0);
                 us.insertUser(user);
             }
-            user_state = user.getState();
 
             // Getting text
             if (msg.isCommand()) {
@@ -99,7 +97,6 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
 
             // Так как это колбэк, то пользователь точно есть
             user = us.findUser(callbackQuery.getFrom().getId());
-            user_state = user.getState();
 
             // генерим ответ
             BtnCallbackFactory bcf = new BtnCallbackFactory(buttonData);
@@ -109,16 +106,7 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
             logger.debug("Inline btn processed");
         }
 
-        // Действия связанные с состоянием пользователя
-        if (user_state != null){
-            if ((user_state == UserState.START_MENU.getStateID()) & (user.getState() == 0)){
-                logger.debug("Remove keyboard");
-                sendMsg.remove_keyboard();
-            }
-        }
-
         // Сохраним пользователя, так как могли поменять его состояние
-        logger.debug("before update state");
         us.updateUser(user);
 
         if (sendMsg.isValid()){
@@ -156,14 +144,13 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
         // Клавиатура
         if (answ instanceof KeyboardAnsw) {
             sendMsg.setKeyBoard(((KeyboardAnsw) answ).getKeyboard());
+
+        } else {
+            // Убираем клавиатуру, если она больше не нужна
+            logger.debug("Remove keyboard");
+            sendMsg.remove_keyboard();
         }
 
-        // Состояние
-        logger.debug("Change user state");
-        user.setState(answ.getRequiredUserState());
-        // Шаг
-        logger.debug("Change user step");
-        user.setStep(answ.getRequiredUserStep());
 
         logger.debug("Msg initiated");
 

@@ -34,6 +34,7 @@ public class Start_kb extends Text implements KeyboardAnsw {
 
     @Override
     public void prepareAnswer(DbUser user) {
+        super.prepareAnswer(user);
         logger.debug("Prepare Start answer");
 
         this.kb = setKeyboard(user);

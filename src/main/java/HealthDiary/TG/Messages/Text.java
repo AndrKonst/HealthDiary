@@ -9,7 +9,8 @@ public class Text implements TextAnsw {
 
     private String answText;
     private UserState state = UserState.EMPTY_STATE;
-    private Integer step = null;
+    private Integer reqStep = null;
+    private Integer curStep = null;
 
     private static final Logger logger = LoggerFactory.getLogger(
             Text.class);
@@ -27,12 +28,27 @@ public class Text implements TextAnsw {
         this.state = state;
     }
 
-    public void setStep(Integer step) {
-        this.step = step;
+    public void setReqStep(Integer reqStep) {
+        this.reqStep = reqStep;
+    }
+
+    public Integer getCurStep() {
+        return curStep;
+    }
+
+    public void setCurStep(Integer curStep) {
+        this.curStep = curStep;
     }
 
     @Override
     public void prepareAnswer(DbUser user) {
+        // Сохраняем данные состояния пользователя
+        // Состояние
+        logger.debug("Change user state");
+        user.setState(this.getRequiredUserState());
+        // Шаг
+        logger.debug("Change user step");
+        user.setStep(this.getRequiredUserStep());
     }
 
     @Override
@@ -47,6 +63,6 @@ public class Text implements TextAnsw {
 
     @Override
     public Integer getRequiredUserStep(){
-        return step;
+        return reqStep;
     };
 }
