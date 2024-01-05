@@ -6,8 +6,8 @@ CREATE SEQUENCE healthdiary.diaries_seq
 create table diaries (
   id integer default nextval('healthdiary.diaries_seq'),
   name text not null,
-  start_dt date default now(),
-  end_dt date,
+  start_dt timestamp with time zone default now(),
+  end_dt timestamp with time zone,
   constraint pk_diaries primary key (id),
   constraint uk_diaries unique (name)
 );

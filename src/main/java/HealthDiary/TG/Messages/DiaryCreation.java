@@ -39,7 +39,7 @@ public class DiaryCreation extends Text {
                 ds.createDiary(this.userAnswText);
             } catch (Exception e) {
                 // Дневник не получилось создать
-                this.setAnswText("Не получилось создать дневник с таким именем :(\nКакое новое имя?");
+                this.setAnswText("Не получилось создать дневник с таким именем \uD83E\uDD37\u200D♂\uFE0F\nКакое новое имя?");
                 this.setReqStep(this.getCurStep());
 
                 // Меняем шаг у пользователя, для повторного ввода названия дневника
