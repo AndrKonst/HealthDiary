@@ -4,5 +4,5 @@ import HealthDiary.TG.Answer;
 
 public interface TextAnsw extends Answer {
 
-    String getAnswText();
+    String getBotAnswText();
 }

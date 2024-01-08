@@ -12,9 +12,10 @@ public class DiaryFillingDao extends BaseDao {
     public DiaryFillingDao() {
         super();
     }
-    public DiaryFillingDao(DbUser user, Integer diaryCreationFl) {
+    public DiaryFillingDao(DbUser user) {
         super();
-        this.df = new DbDiaryFilling(user, diaryCreationFl);
+        this.df = new DbDiaryFilling();
+        this.df.setUser(user);
     }
 
     public DiaryFillingDao(DbDiaryFilling df) {
@@ -42,7 +43,6 @@ public class DiaryFillingDao extends BaseDao {
 
         NativeQuery query = this.getSession().getNamedNativeQuery("df_findLastDf4User");
         query.setParameter("user_id", user_id);
-        query.setParameter("creation_fl", this.df.getCreationFl());
 
         DbDiaryFilling df = (DbDiaryFilling) query.getSingleResult();
         if (df == null){

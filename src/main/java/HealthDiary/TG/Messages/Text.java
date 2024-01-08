@@ -7,62 +7,44 @@ import org.slf4j.LoggerFactory;
 
 public class Text implements TextAnsw {
 
-    private String answText;
-    private UserState state = UserState.EMPTY_STATE;
-    private Integer reqStep = null;
-    private Integer curStep = null;
+    private String botAnswText;
+    private DbUser user;
 
     private static final Logger logger = LoggerFactory.getLogger(
             Text.class);
 
-    public Text(String text){
-        this.answText = text;
+    public Text(String text, DbUser user){
+        this.botAnswText = text;
+        this.user = user;
+
         logger.debug("init Text \"{}\"", text);
     }
 
-    public void setAnswText(String answText) {
-        this.answText = answText;
+    public DbUser getUser() {
+        return user;
     }
 
-    public void setState(UserState state) {
-        this.state = state;
+    public void setBotAnswText(String botAnswText) {
+        this.botAnswText = botAnswText;
     }
 
-    public void setReqStep(Integer reqStep) {
-        this.reqStep = reqStep;
+    public void setUserState(UserState state) {
+        logger.debug("Set user state to \"{}\"", state);
+
+        this.user.setState(state.getStateID());
     }
 
-    public Integer getCurStep() {
-        return curStep;
-    }
+    public void setUserStep(Integer step) {
+        logger.debug("Set user step to \"{}\"", step);
 
-    public void setCurStep(Integer curStep) {
-        this.curStep = curStep;
-    }
-
-    @Override
-    public void prepareAnswer(DbUser user) {
-        // Сохраняем данные состояния пользователя
-        // Состояние
-        logger.debug("Change user state");
-        user.setState(this.getRequiredUserState());
-        // Шаг
-        logger.debug("Change user step");
-        user.setStep(this.getRequiredUserStep());
+        this.user.setStep(step);
     }
 
     @Override
-    public String getAnswText() {
-        return answText;
+    public void prepareAnswer() {}
+
+    @Override
+    public String getBotAnswText() {
+        return botAnswText;
     }
-
-    @Override
-    public Integer getRequiredUserState(){
-        return state.getStateID();
-    };
-
-    @Override
-    public Integer getRequiredUserStep(){
-        return reqStep;
-    };
 }

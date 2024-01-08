@@ -1,7 +1,6 @@
 package HealthDiary.DataBase.services;
 
 import HealthDiary.DataBase.dao.DiaryDao;
-import HealthDiary.DataBase.dao.UserDao;
 import HealthDiary.DataBase.models.DbDiary;
 import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.DataBase.utils.TxFixAction;
@@ -19,8 +18,9 @@ public class DiaryService {
     public DiaryService(DbUser user){
         this.user = user;
     }
+    public DiaryService(){}
 
-    public DbDiary findDiary(Long id){
+    public DbDiary findDiary(int id){
         this.dd = new DiaryDao();
 
         logger.debug("try find diary {} in database", id);

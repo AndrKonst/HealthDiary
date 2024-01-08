@@ -21,7 +21,7 @@ public class DiaryDao extends BaseDao{
         this.diary = diary;
     }
 
-    public DbDiary findById(Long diary_id) {
+    public DbDiary findById(int diary_id) {
 
         DbDiary diary = this.getSession().get(DbDiary.class, diary_id);
         if (diary == null){
@@ -50,6 +50,6 @@ public class DiaryDao extends BaseDao{
         query.setParameter("diary_name", this.diary.getName());
         query.setParameter("user_id", user.getId());
 
-        this.diary.setId((Long) query.getSingleResult());
+        this.diary.setId((int) query.getSingleResult());
     }
 }

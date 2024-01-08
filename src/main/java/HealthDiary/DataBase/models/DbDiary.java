@@ -20,12 +20,12 @@ import static jakarta.persistence.ParameterMode.IN;
         @NamedNativeQuery(
             name="create_diary",
             query="SELECT healthdiary.create_diary(:diary_name, :user_id)",
-            resultClass= Long.class)}
+            resultClass= Integer.class)}
 )
 public class DbDiary {
     @Id
     @Column(name = "id")
-    private long id;
+    private int id;
 
     @Column(name = "name", unique = true)
     private String name;
@@ -42,7 +42,7 @@ public class DbDiary {
         this.name = name;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -50,7 +50,7 @@ public class DbDiary {
         return name;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

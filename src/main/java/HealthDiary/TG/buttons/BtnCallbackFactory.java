@@ -1,5 +1,6 @@
 package HealthDiary.TG.buttons;
 
+import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.TG.Answer;
 import HealthDiary.TG.commands.CommandFactory;
 import HealthDiary.TG.Messages.Text;
@@ -25,7 +26,7 @@ public class BtnCallbackFactory {
         }
     };
 
-    public Answer getBtnCallback(){
+    public Answer getBtnCallback(DbUser user){
 
         logger.debug("Getting callback for button \"{}\" ({})", btn.getText(), btn.getCallbackText());
 
@@ -33,7 +34,7 @@ public class BtnCallbackFactory {
             case DIARY_LIST:
                 return null;
             case NEW_DIARY:
-                return new Text("Создание нового дневника");
+                return new Text("Создание нового дневника", user);
         }
         return null;
     }

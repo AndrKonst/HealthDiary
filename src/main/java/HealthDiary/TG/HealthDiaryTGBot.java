@@ -100,7 +100,7 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
 
             // генерим ответ
             BtnCallbackFactory bcf = new BtnCallbackFactory(buttonData);
-            Answer answ = bcf.getBtnCallback();
+            Answer answ = bcf.getBtnCallback(user);
             sendMsg = initMsg(answ, user, sendMsg);
 
             logger.debug("Inline btn processed");
@@ -131,14 +131,14 @@ public class HealthDiaryTGBot extends TelegramLongPollingBot {
     private TGMessage initMsg(Answer answ, DbUser user, TGMessage sendMsg){
         logger.debug("Start msg initiation");
 
-        answ.prepareAnswer(user);
+        answ.prepareAnswer();
 
         // Кому отправляем
         sendMsg.setChatId(user.getId());
 
         // Текст сообщения
         if (answ instanceof TextAnsw) {
-            sendMsg.setMsgText(((TextAnsw) answ).getAnswText());
+            sendMsg.setMsgText(((TextAnsw) answ).getBotAnswText());
         }
 
         // Клавиатура

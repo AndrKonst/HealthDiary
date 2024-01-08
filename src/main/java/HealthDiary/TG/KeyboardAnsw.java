@@ -7,5 +7,5 @@ public interface KeyboardAnsw extends TextAnsw {
 
     ReplyKeyboard getKeyboard();
 
-    ReplyKeyboard setKeyboard(DbUser user);
+    ReplyKeyboard setKeyboard();
 }

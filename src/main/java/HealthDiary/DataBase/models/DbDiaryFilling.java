@@ -12,9 +12,8 @@ import java.util.Date;
                 query = "select *\n" +
                         "  from healthdiary.diary_filling\n" +
                         " where user_id = :user_id\n" +
-                        "   and dt <= (select max(dt) from healthdiary.diary_filling where user_id = :user_id and creation_fl = :creation_fl)\n" +
-                        "   and creation_fl = :creation_fl",
-                resultClass = DbDiary.class),
+                        "   and dt = (select max(dt) from healthdiary.diary_filling where user_id = :user_id)",
+                resultClass = DbDiaryFilling.class),
         @NamedNativeQuery(
                 name="create_filling",
                 query="SELECT healthdiary.create_filling(:user_id, :diary_creation_fl)",
@@ -33,11 +32,6 @@ public class DbDiaryFilling {
     private Integer creationFl;
 
     public DbDiaryFilling(){
-    }
-
-    public DbDiaryFilling(DbUser user, Integer creationFl) {
-        this.user = user;
-        this.creationFl = creationFl;
     }
 
     public long getId() {

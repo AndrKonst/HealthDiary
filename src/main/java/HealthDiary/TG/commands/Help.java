@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class Help extends Text {
 
-    public Help() {
-        super("help message");
+    public Help(DbUser user) {
+        super("help message", user);
     }
 }

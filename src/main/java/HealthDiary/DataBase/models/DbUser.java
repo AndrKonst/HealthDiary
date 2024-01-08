@@ -40,20 +40,18 @@ public class DbUser {
     public Integer getState() {
         return state;
     }
-
+    public void setState(Integer state) {
+        this.state = state;
+    }
     public Integer getStep() {
         return step;
+    }
+    public void setStep(int step) {
+        this.step = step;
     }
 
     public void setIsAdmin(int isAdmin) {
         this.isAdmin = isAdmin;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
-    public void setStep(Integer step) {
-        this.step = step;
     }
 
     @Override

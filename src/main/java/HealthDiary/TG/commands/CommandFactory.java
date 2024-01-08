@@ -22,7 +22,7 @@ public class CommandFactory {
 
     public Answer getCommand(){
         if (command.startsWith("/help")) {
-            return new Help();
+            return new Help(user);
         } else if (command.startsWith("/start")) {
             return new Start_kb(user);
         } else {

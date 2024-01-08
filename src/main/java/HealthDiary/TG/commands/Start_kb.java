@@ -22,29 +22,33 @@ public class Start_kb extends Text implements KeyboardAnsw {
             Start_kb.class);
 
     public Start_kb(DbUser user) {
-        super(null);
+        super(null, user);
         if (user.getIsAdmin() == 1){
-            setAnswText("Посмотри список твоих дневников или создай новый");
+            this.setBotAnswText("Посмотри список твоих дневников или создай новый");
         } else {
-            setAnswText("Посмотри список твоих дневников");
+            this.setBotAnswText("Посмотри список твоих дневников");
         }
 
-        setState(UserState.START_MENU);
+        setUserState(UserState.START_MENU);
     }
 
     @Override
-    public void prepareAnswer(DbUser user) {
-        super.prepareAnswer(user);
+    public void prepareAnswer() {
+        super.prepareAnswer();
         logger.debug("Prepare Start answer");
 
-        this.kb = setKeyboard(user);
+        logger.debug("default state and step");
+        this.setUserState(UserState.EMPTY_STATE);
+        this.setUserStep(0);
+
+        this.kb = setKeyboard();
     }
 
     public ReplyKeyboard getKeyboard(){
         return this.kb;
     }
 
-    public ReplyKeyboard setKeyboard(DbUser user) {
+    public ReplyKeyboard setKeyboard() {
         // Ряды
         List<KeyboardRow> rowList = new ArrayList<>();
 
@@ -55,7 +59,7 @@ public class Start_kb extends Text implements KeyboardAnsw {
         keyboardButtonsRow1.add(button1_1);
 
         // Новый дневник
-        if (user.getIsAdmin() == 1){
+        if (this.getUser().getIsAdmin() == 1){
             KeyboardButton button1_2 = new KeyboardButton();
             button1_2.setText(Button.NEW_DIARY.getText());
             keyboardButtonsRow1.add(button1_2);
