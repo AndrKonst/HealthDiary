@@ -19,14 +19,27 @@ public class QuestionDao extends BaseDao{
         this.question = question;
     }
 
-    public DbQuestion findById(int questionId) {
+    public DbQuestion getQuestion() {
+        return question;
+    }
 
-        DbQuestion question = this.getSession().get(DbQuestion.class, questionId);
+    public void findById(int questionId) {
+
+        question = this.getSession().get(DbQuestion.class, questionId);
         if (question == null){
             throw new NoDataFound("No question with id \"" + questionId + "\"");
         }
+    }
 
-        return question;
+    public void findByPos(int diaryId, int pos) {
+        NativeQuery query = this.getSession().getNamedNativeQuery("Question_findByPos");
+        query.setParameter("diary_id", diaryId);
+        query.setParameter("pos", pos);
+
+        question = (DbQuestion) query.getSingleResult();
+        if (question == null){
+            throw new NoDataFound("No question with pos \"" + pos + "\" for diary \"" + diaryId + "\"");
+        }
     }
 
     public void addQuestion(int diaryId, int pos) {
@@ -37,5 +50,12 @@ public class QuestionDao extends BaseDao{
         query.setParameter("pos", pos);
 
         this.question.setQuestionId((Integer) query.getSingleResult());
+    }
+
+    public int getLastQuestPos(int diaryId){
+        NativeQuery query = this.getSession().getNamedNativeQuery("last_quest_pos");
+        query.setParameter("diary_id", diaryId);
+
+        return (int) query.getSingleResult();
     }
 }

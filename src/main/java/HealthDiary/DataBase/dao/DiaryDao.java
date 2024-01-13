@@ -21,11 +21,11 @@ public class DiaryDao extends BaseDao{
         this.diary = diary;
     }
 
-    public DbDiary findById(int diary_id) {
+    public DbDiary findById(int diaryId) {
 
-        DbDiary diary = this.getSession().get(DbDiary.class, diary_id);
+        DbDiary diary = this.getSession().get(DbDiary.class, diaryId);
         if (diary == null){
-            throw new NoDataFound("No diary with id \"" + diary_id + "\"");
+            throw new NoDataFound("No diary with id \"" + diaryId + "\"");
         }
 
         return diary;

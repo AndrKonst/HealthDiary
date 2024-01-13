@@ -5,6 +5,7 @@
 drop function if exists create_diary;
 drop function if exists create_filling;
 drop function if exists add_question;
+drop function if exists add_answer;
 
 -- procedures
 drop procedure if exists close_diary;

@@ -65,8 +65,8 @@ public class DbDiary {
     @Override
     public String toString() {
         return "DbDiary{" +
-                "id=" + id +
-                "name=" + name +
+                "id = " + id +
+                ", name = " + name +
                 '}';
     }
 }

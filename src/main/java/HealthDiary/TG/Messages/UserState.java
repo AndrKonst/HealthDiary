@@ -5,7 +5,9 @@ public enum UserState {
     START_MENU(-1, "Start menu"),
     DIARY_CREATION(-2, "Diary Creation"),
     QUESTION_ADDING(-3, "Question adding"),
-    ADDING_QUESTION_ANSWERS(-4, "Adding question answers");
+    ADDING_QUESTION_ANSWER(-4, "Adding question answer"),
+    BEFORE_NEW_QUESTION(-5, "Asking if need another question"),
+    BEFORE_NEW_ANSWER(-6, "Asking if need another answer");
 
     private final Integer stateID;
     private final String stateName;
@@ -41,7 +43,7 @@ public enum UserState {
                 break;
             }
             case -4: {
-                res = UserState.ADDING_QUESTION_ANSWERS;
+                res = UserState.ADDING_QUESTION_ANSWER;
                 break;
             }
             default: {

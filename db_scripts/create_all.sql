@@ -25,6 +25,7 @@ commit;
 \i ./functions/create_diary.sql
 \i ./functions/create_filling.sql
 \i ./functions/add_question.sql
+\i ./functions/add_answer.sql
 
 -- procedures
 \i ./procedures/close_diary.sql

@@ -58,7 +58,7 @@ public class DbUser {
     public String toString(){
         String res;
 
-        if(this.isAdmin == 1){
+        if( this.isAdmin == 1 ){
             res = "User " +
                   this.id +
                   " (operator)," +
@@ -66,7 +66,7 @@ public class DbUser {
                   this.state +
                   ", cur_step = " +
                   this.step;
-        }else{
+        } else {
             res = "User " +
                     this.id +
                     " (not operator)," +

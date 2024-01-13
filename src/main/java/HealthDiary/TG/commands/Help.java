@@ -18,10 +18,17 @@ public class Help extends Text {
     public void prepareAnswer() {
         super.prepareAnswer();
 
-        if (this.getUser().getState() < 0){
+        Integer state = this.getUser().getState();
+
+        if ( state == null ){
             setBotAnswText(
                     "Current info:\n" +
-                    UserState.findState(this.getUser().getState()).toString() + "\n" +
+                            UserState.EMPTY_STATE + "\n" +
+                            "step: " + this.getUser().getStep().toString());
+        } else if( state < 0 ){
+            setBotAnswText(
+                    "Current info:\n" +
+                    UserState.findState(state).toString() + "\n" +
                     "step: " + this.getUser().getStep().toString());
         }
     }

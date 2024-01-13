@@ -32,6 +32,7 @@ public class SessionFactoryUtil {
                 cfg.addAnnotatedClass(DbDiary.class);
                 cfg.addAnnotatedClass(DbDiaryFilling.class);
                 cfg.addAnnotatedClass(DbQuestion.class);
+                cfg.addAnnotatedClass(DbAnswer.class);
 
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(cfg.getProperties());
                 sessionFactory = cfg.buildSessionFactory(builder.build());
