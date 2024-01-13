@@ -13,4 +13,16 @@ public class Help extends Text {
     public Help(DbUser user) {
         super("help message", user);
     }
+
+    @Override
+    public void prepareAnswer() {
+        super.prepareAnswer();
+
+        if (this.getUser().getState() < 0){
+            setBotAnswText(
+                    "Current info:\n" +
+                    UserState.findState(this.getUser().getState()).toString() + "\n" +
+                    "step: " + this.getUser().getStep().toString());
+        }
+    }
 }
