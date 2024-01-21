@@ -34,14 +34,11 @@ public class DbQuestion {
     private int questionId;
     @Column(name = "text")
     private String text;
-    @Column(name = "repeatable")
-    private boolean repeatable;
 
     public DbQuestion(){};
 
     public DbQuestion(String text){
         this.text = text;
-        this.repeatable = false;
     };
 
     public int getQuestionId() {
@@ -50,14 +47,6 @@ public class DbQuestion {
 
     public String getText() {
         return text;
-    }
-
-    public boolean getRepeatable() {
-        return repeatable;
-    }
-
-    public void setRepeatable(boolean repeatable) {
-        this.repeatable = repeatable;
     }
 
     public void setQuestionId(int questionId) {
@@ -69,7 +58,6 @@ public class DbQuestion {
         return "DbQuestion{" +
                 "questionId=" + questionId +
                 ", text='" + text + '\'' +
-                ", repeatable=" + repeatable +
                 '}';
     }
 }
