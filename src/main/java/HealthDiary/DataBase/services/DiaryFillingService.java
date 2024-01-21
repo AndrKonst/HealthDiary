@@ -4,6 +4,7 @@ import HealthDiary.DataBase.dao.DiaryFillingDao;
 import HealthDiary.DataBase.models.DbDiaryFilling;
 import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.DataBase.utils.TxFixAction;
+import HealthDiary.exceptions.NoDataFound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,7 @@ public class DiaryFillingService {
         return dfd.getDf();
     }
 
-    public DbDiaryFilling findDiaryFilling(DbUser user){
+    public DbDiaryFilling findDiaryFilling(DbUser user) throws NoDataFound {
         this.dfd = new DiaryFillingDao(user);
 
         logger.debug("try find diary_filling for user {} in database", user);

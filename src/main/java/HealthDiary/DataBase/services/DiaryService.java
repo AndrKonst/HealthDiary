@@ -64,4 +64,25 @@ public class DiaryService {
         }
 
     }
+
+    public void closeDiary(int diary_id) {
+        DbDiary diary = findDiary(diary_id);
+
+        logger.debug("Close diary \"{}\" by user {} in database", diary.getName(), this.user);
+
+        this.dd = new DiaryDao(diary);
+
+        try {
+            dd.closeDiary();
+            dd.fixTx(TxFixAction.COMMIT);
+
+            logger.debug("Diary {} closed", diary_id);
+        } catch (Exception e) {
+            dd.fixTx(TxFixAction.ROLLBACK);
+
+            logger.error("Cant close diary \"{}\"", diary.getName(), e);
+            throw e;
+        }
+
+    }
 }

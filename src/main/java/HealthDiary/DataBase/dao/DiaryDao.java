@@ -52,4 +52,12 @@ public class DiaryDao extends BaseDao{
 
         this.diary.setId((int) query.getSingleResult());
     }
+
+    public void closeDiary() {
+
+        StoredProcedureQuery query = this.getSession().createNamedStoredProcedureQuery("close_diary");
+        query.setParameter("p_id", this.diary.getId());
+
+        query.execute();
+    }
 }

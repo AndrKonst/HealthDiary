@@ -1,10 +1,14 @@
 package HealthDiary.TG.commands;
 
+import HealthDiary.DataBase.models.DbDiaryFilling;
 import HealthDiary.DataBase.models.DbUser;
+import HealthDiary.DataBase.services.DiaryFillingService;
+import HealthDiary.DataBase.services.DiaryService;
 import HealthDiary.TG.KeyboardAnsw;
 import HealthDiary.TG.Messages.Text;
 import HealthDiary.TG.Messages.UserState;
 import HealthDiary.TG.buttons.Button;
+import HealthDiary.exceptions.NoDataFound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -37,6 +41,18 @@ public class Start_kb extends Text implements KeyboardAnsw {
         super.prepareAnswer();
         logger.debug("Prepare Start answer");
 
+        try {
+            // Find what diary is creating
+            DbDiaryFilling df = new DiaryFillingService().findDiaryFilling(this.getUser());
+            Integer diaryId = df.getCreationFl();
+
+            //close unfinished diary
+            logger.debug("close diary {}", diaryId);
+            DiaryService ds = new DiaryService(this.getUser());
+            ds.closeDiary(diaryId);
+        } catch (NoDataFound e){}
+
+        // set default state
         logger.debug("default state and step");
         this.setUserState(UserState.EMPTY_STATE);
         this.setUserStep(0);

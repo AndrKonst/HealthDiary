@@ -4,6 +4,7 @@ import HealthDiary.DataBase.models.DbDiary;
 import HealthDiary.DataBase.models.DbDiaryFilling;
 import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.exceptions.NoDataFound;
+import jakarta.persistence.NoResultException;
 import org.hibernate.query.NativeQuery;
 
 public class DiaryFillingDao extends BaseDao {
@@ -44,7 +45,13 @@ public class DiaryFillingDao extends BaseDao {
         NativeQuery query = this.getSession().getNamedNativeQuery("df_findLastDf4User");
         query.setParameter("user_id", user_id);
 
-        DbDiaryFilling df = (DbDiaryFilling) query.getSingleResult();
+        DbDiaryFilling df;
+        try {
+            df = (DbDiaryFilling) query.getSingleResult();
+        } catch (NoResultException e) {
+            df = null;
+        }
+
         if (df == null){
             throw new NoDataFound("No df for user \"" + user_id + "\"");
         }

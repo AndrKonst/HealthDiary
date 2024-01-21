@@ -22,6 +22,12 @@ import static jakarta.persistence.ParameterMode.IN;
             query="SELECT healthdiary.create_diary(:diary_name, :user_id)",
             resultClass= Integer.class)}
 )
+@NamedStoredProcedureQuery(
+        name = "close_diary",
+        procedureName = "close_diary",
+        parameters = {
+                @StoredProcedureParameter(name = "p_id", mode = ParameterMode.IN, type = Integer.class)
+        })
 public class DbDiary {
     @Id
     @Column(name = "id")
