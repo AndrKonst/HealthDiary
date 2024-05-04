@@ -24,7 +24,7 @@ public class CommandFactory {
         if (command.startsWith("/help")) {
             return new Help(user);
         } else if (command.startsWith("/start")) {
-            return new Start_kb(user);
+            return new StartKb(user);
         } else {
             logger.warn("Unknown command \"{}\"", command);
             return null;

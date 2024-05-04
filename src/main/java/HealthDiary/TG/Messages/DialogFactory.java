@@ -5,7 +5,7 @@ import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.DataBase.services.DiaryService;
 import HealthDiary.TG.TextAnsw;
 import HealthDiary.TG.buttons.Button;
-import HealthDiary.TG.commands.Start_kb;
+import HealthDiary.TG.commands.StartKb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +60,7 @@ public class DialogFactory {
             } else if (user.getState() == UserState.QUESTION_ADDING.getStateID()) {
                 return new QuestionAdding(this.userText, this.user);
             } else if (userText.equals(Button.BACK.getText())) {
-                return new Start_kb(this.user);
+                return new StartKb(this.user);
             } else {
                 List<DbDiary> userDiaries = new DiaryService(user).getDiaryList();
                 List<String> userDiariesNames = new ArrayList<>();

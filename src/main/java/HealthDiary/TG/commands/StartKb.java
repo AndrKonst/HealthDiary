@@ -19,13 +19,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.ArrayList;
 import java.util.List;
 
-public class Start_kb extends Text implements KeyboardAnsw {
+public class StartKb extends Text implements KeyboardAnsw {
     private ReplyKeyboard kb;
 
     private static final Logger logger = LoggerFactory.getLogger(
-            Start_kb.class);
+            StartKb.class);
 
-    public Start_kb(DbUser user) {
+    public StartKb(DbUser user) {
         super(null, user);
         if (user.getIsAdmin() == 1){
             this.setBotAnswText("Посмотри список твоих дневников или создай новый");
