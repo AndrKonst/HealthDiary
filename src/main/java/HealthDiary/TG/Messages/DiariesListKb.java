@@ -3,6 +3,7 @@ package HealthDiary.TG.Messages;
 import HealthDiary.DataBase.models.DbDiary;
 import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.TG.KeyboardAnsw;
+import HealthDiary.TG.buttons.Button;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +73,7 @@ public class DiariesListKb extends Text implements KeyboardAnsw {
         // back btn
         KeyboardRow backBtnRow = new KeyboardRow();
         KeyboardButton backBtn = new KeyboardButton();
-        backBtn.setText("<< Назад");
+        backBtn.setText(Button.BACK.getText());
         backBtnRow.add(backBtn);
         rowList.add(backBtnRow);
         return rowList;

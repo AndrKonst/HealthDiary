@@ -2,7 +2,8 @@ package HealthDiary.TG.buttons;
 
 public enum Button {
     DIARY_LIST("Список дневников", "diary_list"),
-    NEW_DIARY("Создать новый дневник", "new_diary");
+    NEW_DIARY("Создать новый дневник", "new_diary"),
+    BACK("<< Назад", "back_btn");
 
     private final String text;
     private final String callbackText;

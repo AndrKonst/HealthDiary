@@ -59,7 +59,7 @@ public class DialogFactory {
                 return new AnswerAdding(this.userText, this.user);
             } else if (user.getState() == UserState.QUESTION_ADDING.getStateID()) {
                 return new QuestionAdding(this.userText, this.user);
-            } else if (userText.equals("<< Назад")) {
+            } else if (userText.equals(Button.BACK.getText())) {
                 return new Start_kb(this.user);
             } else {
                 List<DbDiary> userDiaries = new DiaryService(user).getDiaryList();
