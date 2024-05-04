@@ -3,7 +3,6 @@ package HealthDiary.TG.Messages;
 import HealthDiary.DataBase.models.DbDiary;
 import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.TG.KeyboardAnsw;
-import HealthDiary.TG.buttons.Button;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,15 +16,15 @@ import java.util.List;
 
 import static java.lang.Math.ceil;
 
-public class Diaries_kb  extends Text implements KeyboardAnsw {
+public class DiariesListKb extends Text implements KeyboardAnsw {
     private ReplyKeyboard kb;
     private List<DbDiary> diaryList;
     private static final int numberOfButtonsInRow = 3;
 
     private static final Logger logger = LoggerFactory.getLogger(
-            Diaries_kb.class);
+            DiariesListKb.class);
 
-    public Diaries_kb(DbUser user, List<DbDiary> diaryList) {
+    public DiariesListKb(DbUser user, List<DbDiary> diaryList) {
         super("Доступные дневники:", user);
 
         this.diaryList = diaryList;

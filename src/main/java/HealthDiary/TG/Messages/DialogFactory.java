@@ -34,7 +34,7 @@ public class DialogFactory {
             String res = "Список доступных дневников:\n";
             List<DbDiary> userDiaries = new DiaryService(user).getDiaryList();
 
-            return new Diaries_kb(this.user, userDiaries);
+            return new DiariesListKb(this.user, userDiaries);
         } else {
             if (user.getState() == UserState.BEFORE_NEW_QUESTION.getStateID()) {
                 if (this.userText.equalsIgnoreCase("Да")) {
