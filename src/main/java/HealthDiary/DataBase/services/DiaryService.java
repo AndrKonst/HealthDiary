@@ -7,6 +7,8 @@ import HealthDiary.DataBase.utils.TxFixAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class DiaryService {
 
     private static final Logger logger = LoggerFactory.getLogger(
@@ -83,6 +85,25 @@ public class DiaryService {
             logger.error("Cant close diary \"{}\"", diary.getName(), e);
             throw e;
         }
+    }
 
+    public List<DbDiary> getDiaryList() {
+        this.dd = new DiaryDao();
+
+        List<DbDiary> diaryList;
+
+        try {
+            diaryList = dd.getDiaryList();
+            dd.fixTx(TxFixAction.COMMIT);
+
+            logger.debug("Fetched {} diaries for user {}", diaryList.size(), this.user);
+        } catch (Exception e) {
+            dd.fixTx(TxFixAction.ROLLBACK);
+
+            logger.error("Cant fetch diaries for user {}", this.user, e);
+            throw e;
+        }
+
+        return diaryList;
     }
 }

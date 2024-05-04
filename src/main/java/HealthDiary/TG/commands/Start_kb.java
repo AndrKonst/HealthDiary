@@ -32,8 +32,6 @@ public class Start_kb extends Text implements KeyboardAnsw {
         } else {
             this.setBotAnswText("Посмотри список твоих дневников");
         }
-
-        setUserState(UserState.START_MENU);
     }
 
     @Override
@@ -41,21 +39,27 @@ public class Start_kb extends Text implements KeyboardAnsw {
         super.prepareAnswer();
         logger.debug("Prepare Start answer");
 
-        try {
-            // Find what diary is creating
-            DbDiaryFilling df = new DiaryFillingService().findDiaryFilling(this.getUser());
-            Integer diaryId = df.getCreationFl();
+        Integer stateId = this.getUser().getState();
 
-            //close unfinished diary
-            logger.debug("close diary {}", diaryId);
-            DiaryService ds = new DiaryService(this.getUser());
-            ds.closeDiary(diaryId);
-        } catch (NoDataFound e){}
+        if (stateId != null){
+            if (stateId < UserState.START_MENU.getStateID()){
+                try {
+                    // Find what diary is creating now
+                    DbDiaryFilling df = new DiaryFillingService().findDiaryFilling(this.getUser());
+                    Integer diaryId = df.getCreationFl();
 
-        // set default state
-        logger.debug("default state and step");
-        this.setUserState(UserState.EMPTY_STATE);
-        this.setUserStep(0);
+                    //close unfinished diary
+                    logger.debug("close diary {}", diaryId);
+                    DiaryService ds = new DiaryService(this.getUser());
+                    ds.closeDiary(diaryId);
+                } catch (NoDataFound ignored){}
+
+                // set default state
+                logger.debug("default state and step");
+                this.setUserState(UserState.START_MENU);
+                this.setUserStep(0);
+            }
+        }
 
         this.kb = setKeyboard();
     }
@@ -64,7 +68,7 @@ public class Start_kb extends Text implements KeyboardAnsw {
         return this.kb;
     }
 
-    public ReplyKeyboard setKeyboard() {
+    private ReplyKeyboard setKeyboard() {
         // Ряды
         List<KeyboardRow> rowList = new ArrayList<>();
 

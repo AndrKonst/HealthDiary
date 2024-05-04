@@ -3,10 +3,14 @@ package HealthDiary.DataBase.dao;
 import HealthDiary.DataBase.models.DbDiary;
 import HealthDiary.DataBase.models.DbUser;
 import HealthDiary.exceptions.NoDataFound;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.StoredProcedureQuery;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.hibernate.query.NativeQuery;
+import org.jetbrains.annotations.NotNull;
 
 public class DiaryDao extends BaseDao{
 
@@ -59,5 +63,36 @@ public class DiaryDao extends BaseDao{
         query.setParameter("p_id", this.diary.getId());
 
         query.execute();
+    }
+
+    public List<DbDiary> getDiaryList() {
+        List<Object[]> resultList;
+        List<DbDiary> diaryList = new ArrayList<>();
+
+        NativeQuery query = this.getSession().createNativeQuery(
+                "SELECT *\n" +
+                     "FROM diaries\n" +
+                    "WHERE start_dt <= now()\n" +
+                      "AND (end_dt IS NULL OR end_dt > now())");
+        resultList = query.getResultList();
+
+        for (Object[] row : resultList) {diaryList.add(castToDbDiary(row));}
+
+        return diaryList;
+    }
+
+    @NotNull
+    private DbDiary castToDbDiary(Object[] diaryLine){
+        DbDiary diary = new DbDiary();
+
+        diary.setId((int) diaryLine[0]);
+        diary.setName((String) diaryLine[1]);
+        diary.setStartDt(Date.from((Instant) diaryLine[2]));
+
+        if (diaryLine[3] != null){
+            diary.setEndDt(Date.from((Instant) diaryLine[3]));
+        }
+
+        return diary;
     }
 }

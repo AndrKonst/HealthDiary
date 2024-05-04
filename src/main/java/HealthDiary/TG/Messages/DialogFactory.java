@@ -1,10 +1,16 @@
 package HealthDiary.TG.Messages;
 
+import HealthDiary.DataBase.models.DbDiary;
 import HealthDiary.DataBase.models.DbUser;
+import HealthDiary.DataBase.services.DiaryService;
 import HealthDiary.TG.TextAnsw;
 import HealthDiary.TG.buttons.Button;
+import HealthDiary.TG.commands.Start_kb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DialogFactory {
     private String userText;
@@ -25,7 +31,10 @@ public class DialogFactory {
         if (userText.equals(Button.NEW_DIARY.getText()) | user.getState() == UserState.DIARY_CREATION.getStateID()) {
             return new DiaryCreation( this.userText, user);
         } else if (userText.equals(Button.DIARY_LIST.getText())) {
-            return null;
+            String res = "Список доступных дневников:\n";
+            List<DbDiary> userDiaries = new DiaryService(user).getDiaryList();
+
+            return new Diaries_kb(this.user, userDiaries);
         } else {
             if (user.getState() == UserState.BEFORE_NEW_QUESTION.getStateID()) {
                 if (this.userText.equalsIgnoreCase("Да")) {
@@ -50,9 +59,23 @@ public class DialogFactory {
                 return new AnswerAdding(this.userText, this.user);
             } else if (user.getState() == UserState.QUESTION_ADDING.getStateID()) {
                 return new QuestionAdding(this.userText, this.user);
+            } else if (userText.equals("<< Назад")) {
+                return new Start_kb(this.user);
             } else {
-                logger.warn("Unknown text \"{}\"", userText);
-                return null;
+                List<DbDiary> userDiaries = new DiaryService(user).getDiaryList();
+                List<String> userDiariesNames = new ArrayList<>();
+
+                for (DbDiary diary : userDiaries) {
+                    userDiariesNames.add(diary.getName());
+                }
+
+                if (userDiariesNames.contains(userText)) {
+                    logger.info("Starting diary \"{}\"", userText);
+                    return null;
+                } else {
+                    logger.warn("Unknown text \"{}\"", userText);
+                    return null;
+                }
             }
         }
     }

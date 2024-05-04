@@ -11,7 +11,7 @@ import static jakarta.persistence.ParameterMode.IN;
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name = "Diary_findByName",
-                query = "select *\n" +
+                query = "select id, name, start_dt, end_dt\n" +
                         "  from healthdiary.diaries\n" +
                         " where name = :diary_name\n" +
                         "   and start_dt <= now()\n" +
@@ -66,6 +66,10 @@ public class DbDiary {
 
     public void setStartDt(Date startDt) {
         this.startDt = startDt;
+    }
+
+    public void setEndDt(Date endDt) {
+        this.endDt = endDt;
     }
 
     @Override
