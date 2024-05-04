@@ -30,7 +30,10 @@ public class DialogFactory {
         // In case received user text return necessary answer class
         if (userText.equals(Button.NEW_DIARY.getText()) | user.getState() == UserState.DIARY_CREATION.getStateID()) {
             return new DiaryCreation( this.userText, user);
-        } else if (userText.equals(Button.DIARY_LIST.getText())) {
+        } else if (userText.equals(Button.DIARY_LIST.getText()) | userText.equals(Button.DIARY_BACK.getText())) {
+            this.user.setState(UserState.EMPTY_STATE.getStateID());
+            this.user.setStep(0);
+
             String res = "Список доступных дневников:\n";
             List<DbDiary> userDiaries = new DiaryService(user).getDiaryList();
 
@@ -59,19 +62,20 @@ public class DialogFactory {
                 return new AnswerAdding(this.userText, this.user);
             } else if (user.getState() == UserState.QUESTION_ADDING.getStateID()) {
                 return new QuestionAdding(this.userText, this.user);
-            } else if (userText.equals(Button.BACK.getText())) {
+            } else if (userText.equals(Button.DIARY_LIST_BACK.getText())) {
                 return new StartKb(this.user);
             } else {
                 List<DbDiary> userDiaries = new DiaryService(user).getDiaryList();
                 List<String> userDiariesNames = new ArrayList<>();
 
+                // Getting diaries names list
                 for (DbDiary diary : userDiaries) {
                     userDiariesNames.add(diary.getName());
                 }
 
                 if (userDiariesNames.contains(userText)) {
-                    logger.info("Starting diary \"{}\"", userText);
-                    return null;
+                    logger.info("Chosen diary \"{}\"", userText);
+                    return new DiaryKb(userText, this.user);
                 } else {
                     logger.warn("Unknown text \"{}\"", userText);
                     return null;

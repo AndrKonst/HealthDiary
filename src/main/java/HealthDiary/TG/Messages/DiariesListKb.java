@@ -73,7 +73,7 @@ public class DiariesListKb extends Text implements KeyboardAnsw {
         // back btn
         KeyboardRow backBtnRow = new KeyboardRow();
         KeyboardButton backBtn = new KeyboardButton();
-        backBtn.setText(Button.BACK.getText());
+        backBtn.setText(Button.DIARY_LIST_BACK.getText());
         backBtnRow.add(backBtn);
         rowList.add(backBtnRow);
         return rowList;
